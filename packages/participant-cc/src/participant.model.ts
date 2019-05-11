@@ -16,11 +16,10 @@ export class Participant extends ConvectorModel<Participant> {
   public name: string;
 
   @ReadOnly()
-  @Required()
-  @Validate(yup.number())
-  public created: number;
+  @Validate(yup.string())
+  public msp: string;
 
   @Required()
-  @Validate(yup.number())
-  public modified: number;
+  @Validate(yup.string())
+  public x509Fingerprint;
 }
