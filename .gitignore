@@ -117,3 +117,6 @@ fabric.properties
 
 /packages/**/dist/
 /dist/
+chaincode-asset/
+chaincode-participant/
+
