@@ -12,6 +12,11 @@
       "name": "asset-cc",
       "version": "file:./packages/asset-cc",
       "controller": "AssetController"
+    },
+    {
+      "name": "participant-cc",
+      "version": "file:./packages/participant-cc",
+      "controller": "ParticipantController"
     }
   ],
   "policy": {
