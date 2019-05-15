@@ -1,16 +1,15 @@
-import * as yup from 'yup';
+import * as yup from "yup";
 import {
   ConvectorModel,
-  Default,
   ReadOnly,
   Required,
   Validate
-} from '@worldsibu/convector-core-model';
+} from "@worldsibu/convector-core-model";
 
 export class Participant extends ConvectorModel<Participant> {
   @ReadOnly()
   @Required()
-  public readonly type = 'io.worldsibu.participant';
+  public readonly type = "io.worldsibu.participant";
 
   @Required()
   @Validate(yup.string())
