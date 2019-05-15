@@ -1,103 +1,90 @@
-# startWithConvector - participant
+# Start with Convector
+This project was created as part of a tutorial on [Convector](https://github.com/hyperledger-labs/convector), the TypeScript framework for creating [Hyperledger Fabric](https://www.hyperledger.org/projects/fabric) applications.
 
-This awesome project was created automatically with <a href="https://github.com/worldsibu/convector-cli" target="_blank">Convector CLI</a>.
-By default new Convector projects locally include <a href="https://github.com/worldsibu/hurley">Hurley</a> to manage your development environment seamlessly, so you don't have to worry about setting up the network and hard ways to install  and upgrade your chaincodes.
+The project is composed of two chaincode packages, `packages/participant-cc` and `packages/asset-cc`. It allows organizations to create and share assets associated with participants as owners.
 
-## Start
+For more information on the context, see the tutorial page:
 
+To install and test the project, follow the following steps.
+
+## Install and test the project
+To install and test the project, you must clone the repo and follow the following instructions.
+
+### Prerequisites
+This project has been tested on **ubuntu desktop 16.0 64-bits**,, but it should work in any environment that supports Fabric and Convector.
+
+### Install npm dependencies
+While in the project directory, install the dependencies:
 ```
-# Install dependencies - From the root of your project
 npm i
-# Create a new development blockchain network  - From the root of your project
-npm run env:restart
-# Install your smart contract
-npm run cc:start -- participant
-# Make a testing call to create a record in the ledger
-# Beware that the first call may fail with a timeout! Just happens the first time
-hurl invoke participant participant_create "{\"name\":\"my first request\",\"id\":\"0001\",\"created\":0,\"modified\":0}"
 ```
-
-## About Hurley
-
-You may as well install **Hurley** globally for easier and more flexible management. 
-
-`npm i -g @worldsibu/hurley`
-
-Since with Hurley globally you have control over everything, some things that you can do, for example, is installing a Convector Smart Contract with a different name than the one you used for your project.
-
+And start the unit tests:
 ```
-# Use the same package
-# Install a new chaincode with the same source code but the name 'anothernameforyourcc'
-hurl install anothernameforyourcc node
+npm test
 ```
-
-Other complex tasks you may need is installing to a different channel.
-
+### Create a Hyperledger Fabric development network with Hurley
+[Hurley](https://github.com/worldsibu/hurley) is a toolset  of the Convector Suite that facilitates the management of a Fabric development environment. The first creation of a Fabric network will take time because it will start downloading docker images:
 ```
-# Use the same package
-# Be sure you started your environment with more than one channel running 'hurl new --channels 2'. Otherwise this will throw an error.
-hurl install anothernameforyourcc node --channel ch2
-```
-
----
-
-If you don't want to, don't worries! This project works right away.
-
-## Start - if you have Hurley globally
-
-### Bring your project to life 
-
-```
-# Install dependencies - From the root of your project
-npm i
-# Create a new development blockchain network  - From the root of your project
+npm i -g @worldsibu/hurley
 hurl new
 ```
-
-###  Install and upgrade chaincodes
-
+### Build and deploy the chaincode in the Fabric network
+The following command will build the deployment package of the chaincode and deploy it in the Fabric network:
 ```
-# Package your smart contract's code  - From the root of your project
-npm run cc:package -- participant org1
-# Install to your blockchain - From the root of your project
-hurl install participant node -P ./chaincode-participant
-# Install in debug mode, this will run the chaincode server locally so you can debug
-hurl install participant node -P ./chaincode-participant --debug
-
-# Upgrade your existing chaincode - From the root of your project
-hurl upgrade participant node 1.2 -P ./chaincode-participant
+npm run cc:start -- asset
 ```
-
-## Start - if you don't have Hurley globally
-
-### Bring your project to life 
-
+### Invoke the deployed chaincode
+Some invocations that can be made on the chaincode.
+#### Create and request participants 
+Note that the first invocation will take time because it will cause the instantiation of the chaincode. The following invocations will be much faster.
 ```
-# Install dependencies - From the root of your project
-npm i
-# Create a new development blockchain network  - From the root of your project
-npm run env:restart
+# create two participants
+hurl invoke asset participant_register ptcp1 Damien
+hurl invoke asset participant_register ptcp2 Booba
+
+# request the participants by their id
+hurl invoke asset participant_getParticipantById ptcp1
+hurl invoke asset participant_getParticipantById ptcp2
 ```
-
-###  Install and upgrade chaincodes
-
+#### Create and request assets
+Create assets owned by previously created participants:
 ```
-# Install to your blockchain - From the root of your project
-npm run cc:start -- participant
+ASSET1_PARAMS='{"id":"as1","ownerId":"ptcp1","value":"Asset1Value","name":"Asset1Name"}'
+ASSET2_PARAMS='{"id":"as2","ownerId":"ptcp1","value":"Asset2Value","name":"Asset2Name"}'
+ASSET3_PARAMS='{"id":"as3","ownerId":"ptcp2","value":"Asset3Value","name":"Asset3Name"}'
+ASSET4_PARAMS='{"id":"as4","ownerId":"ptcp2","value":"Asset4Value","name":"Asset4Name"}'
 
-# Upgrade your existing chaincode - From the root of your project
-npm run cc:upgrade -- participant 1.2
+hurl invoke asset asset_createAsset $ASSET1_PARAMS
+hurl invoke asset asset_createAsset $ASSET2_PARAMS
+hurl invoke asset asset_createAsset $ASSET3_PARAMS
+hurl invoke asset asset_createAsset $ASSET4_PARAMS
 ```
 
-## Tests
-
+Request the list of open and closed assets:
 ```
-npm run test
+# list of open assets (must return now the list of all assets)
+hurl invoke asset asset_getAllOpenAsset
+
+# list of closed assets (must return now an empty list)
+hurl invoke asset asset_getAllClosedAsset
+```
+Let's close some assets:
+```
+hurl invoke asset asset_closeAsset as1
+hurl invoke asset asset_closeAsset as2
+``` 
+
+Request again the list of open and closed assets:
+```
+# list of open assets (must return now the assets as3 and as4)
+hurl invoke asset asset_getAllOpenAsset
+
+# list of closed assets (must return now the assets as1 and as2)
+hurl invoke asset asset_getAllClosedAsset
 ```
 
-> Check all the information to work with Convector <a href="https://worldsibu.github.io/convector" target="_blank">in the DOCS site</a>.
-
-## Collaborate to the Convector Suite projects
-
-* <a href="https://discord.gg/twRwpWt" target="_blank">Discord chat with the community</a>
-* <a href="https://github.com/worldsibu" target="_blank">Convector projects</a>
+## Troubleshooting
+In case of unexpected errors, you can reset the Fabric environment by starting from scratch:
+```
+hurl clean; hurl new
+``` 
