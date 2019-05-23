@@ -11,7 +11,8 @@ To install and test the project, follow the following steps.
 To install and test the project, you must clone the repo and follow the following instructions.
 
 ### Prerequisites
-This project has been tested on **ubuntu desktop 16.0 64-bits**,, but it should work in any environment that supports Fabric and Convector.
+* **Operating system**: The project has been tested on **ubuntu desktop 16.0 64-bits**, but it should work in any environment that supports Fabric and Convector.
+* **Node.js**: Version 8.14.1. But other versions can work.
 
 ### Install npm dependencies
 While in the project directory, install the dependencies:
