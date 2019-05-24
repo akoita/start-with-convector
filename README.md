@@ -13,6 +13,8 @@ To install and test the project, you must clone the repo and follow the followin
 ### Prerequisites
 * **Operating system**: The project has been tested on **ubuntu desktop 16.0 64-bits**, but it should work in any environment that supports Fabric and Convector.
 * **Node.js**: Version 8.14.1. But other versions can work.
+* **Docker**: 18.09.5
+* **Docker-compose**: 1.23.1
 
 ### Install npm dependencies
 While in the project directory, install the dependencies:
