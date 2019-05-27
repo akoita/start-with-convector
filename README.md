@@ -1,9 +1,9 @@
 # Start with Convector
-This project was created as part of a tutorial on [Convector](https://github.com/hyperledger-labs/convector), the TypeScript framework for creating [Hyperledger Fabric](https://www.hyperledger.org/projects/fabric) applications.
+This project was created as part of a [tutorial](https://medium.com/@aboubakarkoita/develop-a-hyperledger-fabric-application-with-convector-suite-1a2fa8f01011) on [Convector](https://github.com/hyperledger-labs/convector), the TypeScript framework for creating [Hyperledger Fabric](https://www.hyperledger.org/projects/fabric) applications.
 
 The project is composed of two chaincode packages, `packages/participant-cc` and `packages/asset-cc`. It allows organizations to create and share assets associated with participants as owners.
 
-For more information on the context, see the tutorial page:
+For more information on the context, see the [tutorial page](https://medium.com/@aboubakarkoita/develop-a-hyperledger-fabric-application-with-convector-suite-1a2fa8f01011).
 
 To install and test the project, follow the following steps.
 
